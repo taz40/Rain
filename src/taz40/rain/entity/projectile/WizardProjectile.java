@@ -10,7 +10,6 @@ import taz40.rain.graphics.Sprite;
 public class WizardProjectile extends Projectile {
 
 	protected final Random random = new Random();
-	public static final int FIRERATE = 10;
 	
 	public WizardProjectile(double x, double y, double dir) {
 		super(x, y, dir);

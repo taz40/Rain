@@ -1,5 +1,6 @@
 package taz40.rain.entity.mob;
 
+import taz40.rain.Weapons.Weapon;
 import taz40.rain.entity.Entity;
 import taz40.rain.entity.particle.Particle;
 import taz40.rain.entity.projectile.Projectile;
@@ -13,6 +14,7 @@ public abstract class Mob extends Entity {
 	protected int dir = 0;
 	protected boolean moving = false;
 	public int flip = 0;
+	public Weapon weapon;
 	
 	public void move(double xa, double ya){
 		if(xa != 0 && ya != 0){
@@ -82,11 +84,5 @@ public abstract class Mob extends Entity {
 	}
 	
 	public abstract void render(Screen screen);
-	
-	protected void shoot(double x, double y, double dir){
-		//dir = Math.toDegrees(dir);
-		Projectile p = new WizardProjectile(x, y, dir);
-		level.add(p);
-	}
 	
 }

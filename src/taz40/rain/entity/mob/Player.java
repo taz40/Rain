@@ -1,16 +1,14 @@
 package taz40.rain.entity.mob;
 
-import java.util.List;
-
 import taz40.rain.Game;
-import taz40.rain.entity.Entity;
+import taz40.rain.Weapons.WizardWeapon;
 import taz40.rain.entity.projectile.Projectile;
-import taz40.rain.entity.projectile.WizardProjectile;
 import taz40.rain.graphics.AnimatedSprite;
 import taz40.rain.graphics.Screen;
 import taz40.rain.graphics.SpriteSheet;
 import taz40.rain.input.Keyboard;
 import taz40.rain.input.Mouse;
+import taz40.rain.level.Level;
 
 public class Player extends Mob {
 	
@@ -22,26 +20,32 @@ public class Player extends Mob {
 	private AnimatedSprite right = new AnimatedSprite(SpriteSheet.player_right, 32, 32, 3, 7);
 	
 	private AnimatedSprite animSprite = null;
-	
-	private int firerate = 0;
 
 	public Player(Keyboard input){
-		this.input = input;
-		animSprite = down;
+		initiate(input);
+	}
+	
+	public void init(Level level){
+		super.init(level);
+		weapon.init(level);
 	}
 	
 	public Player(int x, int y, Keyboard input){
 		this.x = x;
 		this.y = y;
-		this.input = input;
-		firerate = WizardProjectile.FIRERATE; 
+		initiate(input);
+	}
+	
+	private void initiate(Keyboard input){
+		this.input = input; 
 		animSprite = down;
+		weapon = new WizardWeapon();
 	}
 	
 	public void update(){
+		weapon.update();
 		if(walking) animSprite.update();
 		else animSprite.setFrame(0);
-		if(firerate > 0) firerate--;
 		double xa=0,ya=0;
 		double speed = 1;
 		if(input.up) ya -= speed;
@@ -67,13 +71,10 @@ public class Player extends Mob {
 	}
 
 	private void updateShooting() {
-		if(Mouse.getButton() == 1 && firerate <= 0){
 			double dx = Mouse.getX() - (Game.width*Game.scale)/2;
 			double dy = Mouse.getY() - (Game.height*Game.scale)/2;
 			double dir = Math.atan2(dy, dx);
-			shoot(x, y, dir);
-			firerate = WizardProjectile.FIRERATE;
-		}
+			weapon.shoot(x, y, dir);
 	}
 
 	public void render(Screen screen){
@@ -93,6 +94,7 @@ public class Player extends Mob {
 		}
 		sprite = animSprite.getSprite();
 		screen.renderMob((int)(x - 16),(int) (y - 16), sprite, flip);
+		weapon.render(screen);
 	}
 	
 }
